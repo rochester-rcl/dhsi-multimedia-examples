@@ -5,6 +5,18 @@ from internetarchive import search_items, download
 # csv
 import csv
 
+# os
+import os
+
+# scipy
+import scipy.misc as misc
+
+
+import numpy as np
+
+import math
+
+
 IA_URL = 'https://archive.org/details/'
 
 FORMAT_OPTION = {
@@ -124,6 +136,50 @@ def file_info_to_csv(query, outfile, **kwargs):
 
 def download_files(query, folder, **kwargs):
     items, formats = search_files(query, **kwargs)
+    download_paths = []
+    file_paths = []
     for item in items:
         download(item['ID'], destdir=folder, formats=formats)
+        download_paths.append("{}".format(os.path.join(os.path.abspath(folder), item['ID'])))
+
+    for path in download_paths:
+        for dirname, dirnames, filenames in os.walk(path):
+            for filename in filenames:
+                file_paths.append(os.path.join(dirname, filename))
+
+    return file_paths
+
+
+def avg_image(images, outfile):
+    im_list = []
+    resized = []
+    lowest_width = math.inf
+    lowest_height = math.inf
+    for image in images:
+        im = misc.imread(image)
+        im_list.append(im)
+        h, w, channels = im.shape
+        lowest_width = w if w < lowest_width else lowest_width
+        lowest_height = h if h < lowest_height else lowest_height
+    resize_val = (lowest_width, lowest_height, channels)
+    n_images = len(im_list)
+    for im in im_list:
+        resized.append(misc.imresize(im, resize_val))
+
+    avg = np.zeros(resize_val, dtype=np.float)
+    for im in resized:
+        avg = avg + im / n_images
+
+    out = np.array(np.round(avg), dtype=np.uint8)
+    misc.imsave(outfile, out)
+
+
+
+
+
+
+
+
+
+
 
