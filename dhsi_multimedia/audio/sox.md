@@ -1,4 +1,4 @@
-## ImageMagick Example Commands
+## Sox Example Commands
 
 #### 1. Converting Files
 Basic conversion
