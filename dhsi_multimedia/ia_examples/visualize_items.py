@@ -1,14 +1,14 @@
 # utils
 from io_utils import IOParser
-from ia_helper import download_files, FORMAT_OPTION, parse_formats, avg_image
+from ia_helper import download_files, FORMAT_OPTION, DIR_OPTION, parse_formats, avg_image
 
 if __name__ == '__main__':
-    parser = IOParser(add_args=[FORMAT_OPTION])
-    query, outdir, formats = parser.get_all_arguments()
+    parser = IOParser(add_args=[FORMAT_OPTION, DIR_OPTION])
+    query, outfile, formats, directory = parser.get_all_arguments()
     paths = []
     if formats:
-        paths = download_files(query, outdir, formats=parse_formats(formats))
+        paths = download_files(query, directory, formats=parse_formats(formats))
     else:
-        paths = download_files(query, outdir)
+        paths = download_files(query, directory)
 
-    avg_image(paths, 'test.png')
+    avg_image(paths, outfile)

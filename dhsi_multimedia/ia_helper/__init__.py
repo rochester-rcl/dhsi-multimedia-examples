@@ -27,6 +27,14 @@ FORMAT_OPTION = {
     'type': str
 }
 
+DIR_OPTION = {
+    'short': '-d',
+    'verbose': '--directory',
+    'help': 'The path to a directory to save files to',
+    'required': False,
+    'type': str
+}
+
 
 def parse_formats(formats):
     if ',' in formats:
