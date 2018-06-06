@@ -135,7 +135,7 @@ def file_info_to_csv(query, outfile, **kwargs):
 
 
 def download_files(query, folder, **kwargs):
-    items, formats = search_files(query, **kwargs)
+    items, formats, meta = search_files(query, **kwargs)
     download_paths = []
     file_paths = []
     for item in items:
