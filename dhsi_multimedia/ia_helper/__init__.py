@@ -90,16 +90,17 @@ def search_files(query, **kwargs):
 
     def format_item(item, **kwargs):
         item_info = {}
-        for file in item.item_metadata['files']:
-            fformat = file['format']
-            valid = check_format(fformat)
-            if valid:
-                if fformat not in formats:
-                    formats.append(file['format'])
-                if fformat not in item_info:
-                    item_info[fformat] = 1
-                else:
-                    item_info[fformat] += 1
+        if 'files' in item.item_metadata:
+            for file in item.item_metadata['files']:
+                fformat = file['format']
+                valid = check_format(fformat)
+                if valid:
+                    if fformat not in formats:
+                        formats.append(file['format'])
+                    if fformat not in item_info:
+                        item_info[fformat] = 1
+                    else:
+                        item_info[fformat] += 1
 
         if item_info_has_files(item_info):
             item_info['Title'] = item.metadata['title']
@@ -163,16 +164,19 @@ def avg_image(images, outfile):
     resized = []
     lowest_width = math.inf
     lowest_height = math.inf
+    channels = 3
     for image in images:
         im = misc.imread(image)
         im_list.append(im)
-        h, w, channels = im.shape
+        h, w, _ = im.shape
         lowest_width = w if w < lowest_width else lowest_width
         lowest_height = h if h < lowest_height else lowest_height
     resize_val = (lowest_width, lowest_height, channels)
     n_images = len(im_list)
     for im in im_list:
-        resized.append(misc.imresize(im, resize_val))
+        h, w, chan = im.shape
+        if chan == channels:
+            resized.append(misc.imresize(im, resize_val))
 
     avg = np.zeros(resize_val, dtype=np.float)
     for im in resized:
