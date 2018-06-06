@@ -10,4 +10,3 @@ if __name__ == '__main__':
         paths = download_files(query, outdir, formats=parse_formats(formats))
     else:
         paths = download_files(query, outdir)
-    print(paths)

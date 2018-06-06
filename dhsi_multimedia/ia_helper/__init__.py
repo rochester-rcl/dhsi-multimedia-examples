@@ -121,7 +121,7 @@ def search_files(query, **kwargs):
 
     except KeyboardInterrupt:
         print("Stopping search ...")
-        return items, formats
+        return items, formats, meta
 
 
 def file_info_to_csv(query, outfile, **kwargs):
