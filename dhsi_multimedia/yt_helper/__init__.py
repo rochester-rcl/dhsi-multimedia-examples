@@ -25,7 +25,7 @@ def get_urls(keyword):
 def download_videos(videos, directory):
     try:
         for video in videos:
-            YouTube('https://youtu.be/9bZkp7q19f0').streams.first().download(output_path=directory)
+            YouTube(video).streams.first().download(output_path=directory)
             print("Successfully downloaded {} to {}".format(video, directory))
     except exceptions.PytubeError as error:
         print(error)
