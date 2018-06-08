@@ -179,9 +179,10 @@ def avg_image(images, outfile, **kwargs):
 
     n_images = len(im_list)
     for im in im_list:
-        w, h, chan = im.shape
-        if chan == channels:
-            resized.append(misc.imresize(im, resize_val))
+        if len(im.shape) == 3:
+            w, h, chan = im.shape
+            if chan == channels:
+                resized.append(misc.imresize(im, resize_val))
 
     avg = np.zeros(resize_val, dtype=np.float)
 
