@@ -208,28 +208,34 @@ def extract_jpegs_from_pdf(pdf_file, dirname):
         return jpegs
 
 
-def avg_image(images, outfile):
+def avg_image(images, outfile, **kwargs):
     im_list = []
     resized = []
-    lowest_width = math.inf
-    lowest_height = math.inf
+    lowest_width = 0
+    lowest_height = 0
     channels = 3
     for image in images:
         im = misc.imread(image)
         im_list.append(im)
-        h, w, _ = im.shape
-        lowest_width = w if w < lowest_width else lowest_width
-        lowest_height = h if h < lowest_height else lowest_height
+        w, h, _ = im.shape
+        lowest_width = w if w > lowest_width else lowest_width
+        lowest_height = h if h > lowest_height else lowest_height
     resize_val = (lowest_width, lowest_height, channels)
+
     n_images = len(im_list)
     for im in im_list:
-        h, w, chan = im.shape
+        w, h, chan = im.shape
         if chan == channels:
             resized.append(misc.imresize(im, resize_val))
 
     avg = np.zeros(resize_val, dtype=np.float)
-    for im in resized:
+
+    for index, im in enumerate(resized):
         avg = avg + im / n_images
+        if 'frames_dir' in kwargs:
+            filename = '{}/frame_{:06}.jpg'.format(kwargs['frames_dir'], index)
+            frame = np.array(np.round(avg), dtype=np.uint8)
+            misc.imsave(filename, frame)
 
     out = np.array(np.round(avg), dtype=np.uint8)
     misc.imsave(outfile, out)
