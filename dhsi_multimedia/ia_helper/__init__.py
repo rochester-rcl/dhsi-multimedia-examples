@@ -172,9 +172,10 @@ def avg_image(images, outfile, **kwargs):
     for image in images:
         im = misc.imread(image)
         im_list.append(im)
-        w, h, _ = im.shape
-        lowest_width = w if w > lowest_width else lowest_width
-        lowest_height = h if h > lowest_height else lowest_height
+        if len(im.shape) == 3:
+            w, h, _ = im.shape
+            lowest_width = w if w > lowest_width else lowest_width
+            lowest_height = h if h > lowest_height else lowest_height
     resize_val = (lowest_width, lowest_height, channels)
 
     n_images = len(im_list)
