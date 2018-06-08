@@ -35,7 +35,7 @@ def avg_audio(paths, out, duration):
         track = track[index:index+chunk]
         avg = avg + track / num_tracks
 
-    wavfile.write(out, rate, avg)
+    wavfile.write(np.normaout, rate, avg)
 
 DURATION = {
     'short': '-d',
