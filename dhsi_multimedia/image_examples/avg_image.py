@@ -12,5 +12,7 @@ if __name__ == '__main__':
         for filename in filenames:
             if os.path.splitext(filename)[1] in extensions:
                 paths.append(os.path.abspath(os.path.join(dirname, filename)))
-
-    avg_image(paths, outfile, frames_dir=outdir)
+    if outdir is None:
+        avg_image(paths, outfile, frames_dir=outdir)
+    else:
+        avg_image(paths, outfile)
